@@ -17,15 +17,40 @@ I specialize in designing and optimizing high-scale eCommerce platforms using Sa
 
 
 ---
-
 ## 📦 Accelerators
 
 | Module | Description | Status |
 |--------|-------------|--------|
-| [`/caching`](./caching/) | Page, partial & API response caching utilities 
-| [`/api-optimization`](./api-optimization/) | OCAPI/SCAPI request batching & retry logic  
-| [`/lazy-loading`](./lazy-loading/) | Image & component lazy-loading for storefronts 
-| [`/docs`](./docs/) | Architecture decisions & integration guides 
+| [`/caching`](./caching/) | Page, partial & API response caching utilities | ✅ Ready |
+| [`/api-optimization`](./api-optimization/) | OCAPI/SCAPI request batching & retry logic | ✅ Ready |
+| [`/lazy-loading`](./lazy-loading/) | Image & component lazy-loading for storefronts | ✅ Ready |
+| [`/docs`](./docs/) | Architecture decisions & integration guides | ✅ Ready |
+
+
+## 🧩 Module Overview
+
+### 1. `/caching` — Smart Caching Layer
+Reduces server load and TTFB by implementing:
+- **Full-page caching** with Vary header control
+- **Partial page caching** (PPC) for reusable components
+- **Custom cache-key builders** for personalised/segmented content
+- **API response caching** using SFCC's `dw.system.CacheMgr`
+
+### 2. `/api-optimization` — OCAPI & SCAPI Optimiser
+Minimises round-trips and improves API throughput:
+- **Request batching** for product/category data calls
+- **Exponential backoff retry** wrapper for transient failures
+- **Field-selector utility** to reduce response payload size
+- **Client-credential token caching** to avoid redundant auth calls
+
+### 3. `/lazy-loading` — Storefront Lazy Loader
+Improves Core Web Vitals (LCP, CLS) by deferring non-critical assets:
+- **IntersectionObserver-based** image lazy loader (no jQuery dependency)
+- **Responsive `srcset` builder** for SFCC's Dynamic Imaging (DIS) URLs
+- **Component-level lazy hydration** for below-the-fold ISML content
+- **Skeleton screen helper** to eliminate layout shift
+
+
 
 ## 🏆 Key Achievements
 
