@@ -1,0 +1,235 @@
+<!-- SFCC Checkout Optimization Flow Diagram -->
+<!-- Embed in docs or README: <img src="checkout-flow-diagram.svg"> -->
+<!-- Or open directly in a browser for the full interactive version -->
+<svg width="100%" viewBox="0 0 680 920" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>SFCC Optimized Checkout Flow</title>
+  <desc>Flow diagram comparing the default SFCC 5-step checkout against the optimized 3-step flow, with bottleneck annotations and optimization callouts.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- ── Column headers ──────────────────────────────────────────────────── -->
+
+  <g>
+    <rect x="40" y="16" width="268" height="32" rx="6" fill="#F7C1C1" stroke="#E24B4A" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#791F1F" x="174" y="37" text-anchor="middle">Default SFRA — 5 steps, 4 round-trips</text>
+  </g>
+  <g>
+    <rect x="372" y="16" width="268" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="37" text-anchor="middle">Optimized — 3 steps, 2 round-trips</text>
+  </g>
+
+  <!-- ── Divider ─────────────────────────────────────────────────────────── -->
+  <line x1="340" y1="10" x2="340" y2="910" stroke="#888780" stroke-width="0.5" stroke-dasharray="4 4"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- LEFT COLUMN — Default flow                                             -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Step 1: Cart -->
+  <g>
+    <rect x="60" y="70" width="228" height="44" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#085041" x="174" y="87" text-anchor="middle">Cart</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#0F6E56" x="174" y="104" text-anchor="middle">User reviews items</text>
+  </g>
+
+  <!-- Arrow + label -->
+  <line x1="174" y1="114" x2="174" y2="136" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Step 2: Login / Guest -->
+  <g>
+    <rect x="60" y="138" width="228" height="44" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#4A1B0C" x="174" y="155" text-anchor="middle">Login / Guest choice</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#993C1D" x="174" y="172" text-anchor="middle">Login form shown first ← friction</text>
+  </g>
+
+  <!-- Bottleneck pill -->
+  <rect x="80" y="186" width="190" height="18" rx="9" fill="#F7C1C1" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#791F1F" x="175" y="199" text-anchor="middle">⚠ 34% abandonment at this step</text>
+
+  <line x1="174" y1="204" x2="174" y2="226" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Step 3: Address -->
+  <g>
+    <rect x="60" y="228" width="228" height="44" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#4A1B0C" x="174" y="245" text-anchor="middle">Address (server round-trip 1)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#993C1D" x="174" y="262" text-anchor="middle">No pre-fill · no inline validation</text>
+  </g>
+
+  <!-- Latency annotation -->
+  <rect x="80" y="276" width="190" height="18" rx="9" fill="#F7C1C1" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#791F1F" x="175" y="289" text-anchor="middle">POST → 180–420 ms</text>
+
+  <line x1="174" y1="294" x2="174" y2="316" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Step 4: Shipping -->
+  <g>
+    <rect x="60" y="318" width="228" height="44" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#4A1B0C" x="174" y="335" text-anchor="middle">Shipping (server round-trip 2)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#993C1D" x="174" y="352" text-anchor="middle">Rates calculated synchronously</text>
+  </g>
+
+  <rect x="80" y="366" width="190" height="18" rx="9" fill="#F7C1C1" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#791F1F" x="175" y="379" text-anchor="middle">POST → 200–800 ms</text>
+
+  <line x1="174" y1="384" x2="174" y2="406" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Step 5: Payment -->
+  <g>
+    <rect x="60" y="408" width="228" height="44" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#4A1B0C" x="174" y="425" text-anchor="middle">Payment (server round-trip 3)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#993C1D" x="174" y="442" text-anchor="middle">SDK loads cold · no preconnect</text>
+  </g>
+
+  <rect x="80" y="456" width="190" height="18" rx="9" fill="#F7C1C1" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#791F1F" x="175" y="469" text-anchor="middle">SDK load + gateway: 600–2000 ms</text>
+
+  <line x1="174" y1="474" x2="174" y2="496" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Step 6: Place Order -->
+  <g>
+    <rect x="60" y="498" width="228" height="44" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#4A1B0C" x="174" y="515" text-anchor="middle">Place order (round-trip 4)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#993C1D" x="174" y="532" text-anchor="middle">No optimistic UI · double-click risk</text>
+  </g>
+
+  <rect x="80" y="546" width="190" height="18" rx="9" fill="#F7C1C1" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#791F1F" x="175" y="559" text-anchor="middle">Charge + order: 500–2500 ms</text>
+
+  <line x1="174" y1="564" x2="174" y2="586" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Confirmation -->
+  <g>
+    <rect x="60" y="588" width="228" height="44" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#085041" x="174" y="605" text-anchor="middle">Order confirmation</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#0F6E56" x="174" y="622" text-anchor="middle">No account creation offer</text>
+  </g>
+
+  <!-- Total time box -->
+  <rect x="60" y="644" width="228" height="36" rx="8" fill="#F7C1C1" stroke="#E24B4A" stroke-width="1"/>
+  <text font-family="system-ui, sans-serif" font-size="12" font-weight="500" fill="#791F1F" x="174" y="658" text-anchor="middle">Avg total: 1200–3800 ms</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#A32D2D" x="174" y="673" text-anchor="middle">across 4 network round-trips</text>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- RIGHT COLUMN — Optimized flow                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Step 1: Cart -->
+  <g>
+    <rect x="392" y="70" width="228" height="44" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#085041" x="506" y="87" text-anchor="middle">Cart</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#0F6E56" x="506" y="104" text-anchor="middle">User reviews items</text>
+  </g>
+
+  <line x1="506" y1="114" x2="506" y2="136" stroke="#639922" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+  <!-- Guest path — optimized -->
+  <g>
+    <rect x="392" y="138" width="228" height="54" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="155" text-anchor="middle">Guest CTA promoted first</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="172" text-anchor="middle">Email captured immediately</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="185" text-anchor="middle">Smart login nudge if account found</text>
+  </g>
+
+  <!-- Optimization tag -->
+  <rect x="412" y="196" width="188" height="18" rx="9" fill="#C0DD97" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#27500A" x="506" y="209" text-anchor="middle">✓ GuestCheckoutOptimizer.js</text>
+
+  <line x1="506" y1="214" x2="506" y2="236" stroke="#639922" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+  <!-- Collapsed step: Address + Shipping merged -->
+  <g>
+    <rect x="392" y="238" width="228" height="64" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="256" text-anchor="middle">Address + Shipping (1 round-trip)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="272" text-anchor="middle">Pre-filled from profile/browser</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="287" text-anchor="middle">Inline validation · auto-advance</text>
+  </g>
+
+  <rect x="412" y="306" width="188" height="18" rx="9" fill="#C0DD97" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#27500A" x="506" y="319" text-anchor="middle">✓ CheckoutStepReducer.js · 260–580 ms</text>
+
+  <line x1="506" y1="324" x2="506" y2="346" stroke="#639922" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+  <!-- Payment optimized -->
+  <g>
+    <rect x="392" y="348" width="228" height="64" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="366" text-anchor="middle">Payment (SDK pre-loaded)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="382" text-anchor="middle">Preconnect warmed during step 2</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="397" text-anchor="middle">Optimistic UI · timeout + retry</text>
+  </g>
+
+  <rect x="412" y="416" width="188" height="18" rx="9" fill="#C0DD97" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#27500A" x="506" y="429" text-anchor="middle">✓ PaymentLatencyHandler.js · 300–900 ms</text>
+
+  <line x1="506" y1="434" x2="506" y2="456" stroke="#639922" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+  <!-- Place Order optimized -->
+  <g>
+    <rect x="392" y="458" width="228" height="54" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="476" text-anchor="middle">Place order (1 round-trip)</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="492" text-anchor="middle">Double-click protected</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="507" text-anchor="middle">Retry on gateway transient failure</text>
+  </g>
+
+  <rect x="412" y="516" width="188" height="18" rx="9" fill="#C0DD97" stroke="none"/>
+  <text font-family="system-ui, sans-serif" font-size="10" fill="#27500A" x="506" y="529" text-anchor="middle">✓ RetryHandler.js · 420–1200 ms</text>
+
+  <line x1="506" y1="534" x2="506" y2="556" stroke="#639922" stroke-width="1" marker-end="url(#arrow-green)"/>
+
+  <!-- Confirmation + account creation -->
+  <g>
+    <rect x="392" y="558" width="228" height="54" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+    <text font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#27500A" x="506" y="576" text-anchor="middle">Order confirmation</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="592" text-anchor="middle">Post-purchase account creation</text>
+    <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="506" y="607" text-anchor="middle">Cart-recovery email already queued</text>
+  </g>
+
+  <!-- Total time box -->
+  <rect x="392" y="624" width="228" height="36" rx="8" fill="#C0DD97" stroke="#639922" stroke-width="1"/>
+  <text font-family="system-ui, sans-serif" font-size="12" font-weight="500" fill="#173404" x="506" y="638" text-anchor="middle">Avg total: 580–1680 ms</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#27500A" x="506" y="653" text-anchor="middle">across 2 network round-trips</text>
+
+  <!-- ── Bottleneck legend ────────────────────────────────────────────────── -->
+
+  <rect x="40" y="690" width="600" height="1" fill="#D3D1C7"/>
+
+  <text font-family="system-ui, sans-serif" font-size="12" font-weight="500" fill="#444441" x="340" y="714" text-anchor="middle">Checkout bottleneck severity scale</text>
+
+  <!-- Legend items -->
+  <rect x="40" y="724" width="14" height="14" rx="3" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#444441" x="62" y="735">Fast  (&lt; warn threshold)</text>
+
+  <rect x="190" y="724" width="14" height="14" rx="3" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#444441" x="212" y="735">Slow  (warn threshold exceeded)</text>
+
+  <rect x="390" y="724" width="14" height="14" rx="3" fill="#F7C1C1" stroke="#E24B4A" stroke-width="0.5"/>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#444441" x="412" y="735">Critical  (critical threshold exceeded)</text>
+
+  <!-- ── Module legend ───────────────────────────────────────────────────── -->
+
+  <rect x="40" y="756" width="600" height="1" fill="#D3D1C7"/>
+
+  <text font-family="system-ui, sans-serif" font-size="12" font-weight="500" fill="#444441" x="340" y="780" text-anchor="middle">Module file map</text>
+
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="40" y="802">CheckoutStepReducer.js</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#5F5E5A" x="200" y="802">→  Merges address+shipping, pre-fill, inline validation, single-method auto-advance</text>
+
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="40" y="822">GuestCheckoutOptimizer.js</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#5F5E5A" x="200" y="822">→  Guest CTA promotion, autocomplete hints, email-first capture, smart nudge</text>
+
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="40" y="842">PaymentLatencyHandler.js</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#5F5E5A" x="200" y="842">→  Preconnect warmup, SDK preload, optimistic UI lock, timeout+retry</text>
+
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#3B6D11" x="40" y="862">CheckoutBottleneckProfiler.js</text>
+  <text font-family="system-ui, sans-serif" font-size="11" fill="#5F5E5A" x="200" y="862">→  Per-span timing with WARN/CRITICAL thresholds, aggregated bottleneck report</text>
+
+</svg>
