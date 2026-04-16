@@ -1,0 +1,235 @@
+/**
+ * SkeletonHelper.css
+ * ─────────────────────────────────────────────────────────────────────────────
+ * SFCC Performance Toolkit — /lazy-loading
+ *
+ * Plug-and-play skeleton screen utilities that prevent Cumulative Layout Shift
+ * (CLS) and improve perceived performance on SFCC storefronts.
+ *
+ * Usage:
+ *   1. Link this file in your page <head>
+ *   2. Add .skeleton-* classes to your ISML templates while content loads
+ *   3. Remove skeleton classes (or the elements) when JS hydration completes
+ *
+ * Skeleton components:
+ *   .skeleton-block      — generic rectangular placeholder
+ *   .skeleton-text       — text-line placeholder
+ *   .skeleton-circle     — avatar / icon circle
+ *   .skeleton-image      — image / media placeholder
+ *   .skeleton-card       — full product-card skeleton
+ *   .skeleton-grid       — grid of product-card skeletons
+ *   .skeleton-hero       — full-width hero banner placeholder
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ─── CSS Custom Properties ────────────────────────────────────────────────── */
+
+:root {
+    --skeleton-base     : #e8e8e8;
+    --skeleton-shimmer  : #f5f5f5;
+    --skeleton-radius   : 4px;
+    --skeleton-speed    : 1.6s;
+    --skeleton-easing   : ease-in-out;
+    --skeleton-img-ratio: 100%;  /* Default 1:1; override per context */
+}
+
+/* ─── Shimmer animation ─────────────────────────────────────────────────────── */
+
+@keyframes skeletonShimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+}
+
+/* ─── Base mixin ────────────────────────────────────────────────────────────── */
+
+.skeleton-block,
+.skeleton-text,
+.skeleton-circle,
+.skeleton-image,
+.skeleton-card,
+.skeleton-hero {
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-base)    25%,
+        var(--skeleton-shimmer) 50%,
+        var(--skeleton-base)    75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonShimmer var(--skeleton-speed) var(--skeleton-easing) infinite;
+    border-radius: var(--skeleton-radius);
+}
+
+/* ─── Block ─────────────────────────────────────────────────────────────────── */
+
+.skeleton-block {
+    display: block;
+    width   : 100%;
+    height  : 1rem;
+}
+
+/* ─── Text lines ────────────────────────────────────────────────────────────── */
+
+.skeleton-text {
+    display      : block;
+    height       : 0.875rem;
+    margin-bottom: 0.5rem;
+    border-radius: 3px;
+}
+
+/* Automatically narrow the last text line (mimics real text) */
+.skeleton-text:last-child {
+    width: 70%;
+}
+
+.skeleton-text--lg { height: 1.25rem; }
+.skeleton-text--sm { height: 0.75rem; }
+
+/* ─── Circle (avatars, icons) ───────────────────────────────────────────────── */
+
+.skeleton-circle {
+    border-radius: 50%;
+    width : 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+}
+
+.skeleton-circle--sm { width: 1.5rem; height: 1.5rem; }
+.skeleton-circle--lg { width: 4rem;   height: 4rem;   }
+
+/* ─── Image / media placeholder ────────────────────────────────────────────── */
+
+/**
+ * Maintains aspect ratio without knowing the image dimensions.
+ * Set --skeleton-img-ratio to the image's aspect-ratio percentage:
+ *   1:1 → 100%, 4:3 → 75%, 16:9 → 56.25%, 3:4 → 133.33%
+ *
+ * Usage:
+ *   <div class="skeleton-image" style="--skeleton-img-ratio: 133.33%"></div>
+ */
+.skeleton-image {
+    position  : relative;
+    width     : 100%;
+    overflow  : hidden;
+    border-radius: var(--skeleton-radius);
+}
+
+.skeleton-image::before {
+    content    : '';
+    display    : block;
+    padding-top: var(--skeleton-img-ratio, 100%);
+}
+
+/* ─── Product card ──────────────────────────────────────────────────────────── */
+
+/**
+ * Full product-tile skeleton — matches the visual footprint of a real tile.
+ * Place inside the same grid container as real product tiles.
+ *
+ * <div class="skeleton-card"></div>
+ */
+.skeleton-card {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.5rem;
+    background    : none;
+    animation     : none;
+    padding       : 0;
+}
+
+.skeleton-card::before {
+    /* Image area */
+    content      : '';
+    display      : block;
+    width        : 100%;
+    padding-top  : 133.33%; /* 3:4 portrait */
+    background   : linear-gradient(
+        90deg,
+        var(--skeleton-base)    25%,
+        var(--skeleton-shimmer) 50%,
+        var(--skeleton-base)    75%
+    );
+    background-size: 200% 100%;
+    animation    : skeletonShimmer var(--skeleton-speed) var(--skeleton-easing) infinite;
+    border-radius: var(--skeleton-radius);
+}
+
+.skeleton-card__body {
+    display      : flex;
+    flex-direction: column;
+    gap          : 0.375rem;
+    padding      : 0 0.25rem;
+}
+
+/* ─── Skeleton grid (e.g. category page) ────────────────────────────────────── */
+
+/**
+ * Drop-in skeleton grid for a product listing page.
+ * Mirrors a 2→3→4 column responsive product grid.
+ *
+ * <div class="skeleton-grid" data-count="12"></div>
+ *
+ * JS hydration (optional — auto-generates .skeleton-card children):
+ *   document.querySelectorAll('.skeleton-grid').forEach(function (grid) {
+ *     var count = parseInt(grid.dataset.count, 10) || 8;
+ *     for (var i = 0; i < count; i++) {
+ *       var card = document.createElement('div');
+ *       card.className = 'skeleton-card';
+ *       var body = document.createElement('div');
+ *       body.className = 'skeleton-card__body';
+ *       ['skeleton-text skeleton-text--lg', 'skeleton-text', 'skeleton-text skeleton-text--sm'].forEach(function (cls) {
+ *         var line = document.createElement('span');
+ *         line.className = cls;
+ *         body.appendChild(line);
+ *       });
+ *       card.appendChild(body);
+ *       grid.appendChild(card);
+ *     }
+ *   });
+ */
+.skeleton-grid {
+    display              : grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap                  : 1rem;
+    background           : none;
+    animation            : none;
+}
+
+@media (min-width: 544px) {
+    .skeleton-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 992px) {
+    .skeleton-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ─── Hero banner ────────────────────────────────────────────────────────────── */
+
+/**
+ * Full-width hero placeholder. Uses padding-top to hold space before the real
+ * banner loads — prevents CLS on above-the-fold content.
+ *
+ * <div class="skeleton-hero"></div>
+ */
+.skeleton-hero {
+    width         : 100%;
+    padding-top   : 40%;       /* 5:2 aspect ratio — adjust to match hero design */
+    border-radius : 0;
+}
+
+@media (max-width: 544px) {
+    .skeleton-hero { padding-top: 100%; } /* Square on mobile */
+}
+
+/* ─── Accessibility: reduce motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-block,
+    .skeleton-text,
+    .skeleton-circle,
+    .skeleton-image::before,
+    .skeleton-card::before,
+    .skeleton-hero {
+        animation: none;
+        background: var(--skeleton-base);
+    }
+}
