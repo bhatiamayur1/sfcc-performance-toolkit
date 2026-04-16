@@ -54,6 +54,54 @@ Improves Core Web Vitals (LCP, CLS) by deferring non-critical assets:
 - **Responsive `srcset` builder** for SFCC's Dynamic Imaging (DIS) URLs
 - **Component-level lazy hydration** for below-the-fold ISML content
 - **Skeleton screen helper** to eliminate layout shift
+  
+### 4. `/checkout-optimization` — Checkout Performance Enhancer
+Optimises critical checkout flows to improve conversion rates:
+
+- Reduces unnecessary server calls during checkout steps  
+- Optimised form submission and validation handling  
+- Payment integration latency handling with fallback strategies  
+- Session and cart data optimization for faster processing  
+
+### 5. `/frontend-performance` — Frontend Performance Enhancer
+Enhances storefront responsiveness and rendering efficiency:
+
+- Minification and bundling of JS/CSS assets  
+- Reduction of render-blocking resources  
+- Critical CSS loading strategy  
+- Performance tuning aligned with Core Web Vitals  
+
+### 6. `/seo-performance` — SEO Performance Optimizer
+Improves search engine ranking through faster and optimized pages:
+
+- Optimized metadata and structured data loading  
+- Faster page rendering for improved crawl efficiency  
+- Reduced duplicate content and improved canonical handling  
+- Performance tuning aligned with Google PageSpeed insights  
+
+### 7. `/search-optimization` — Search Performance Enhancer
+Improves speed and relevance of product search experience:
+
+- Optimized query handling and result fetching  
+- Caching strategies for frequent search queries  
+- Reduced latency for large product catalogs  
+- Improved filtering and sorting performance  
+
+### 8. `/third-party-integration-performance` — Integration Performance Layer
+Optimizes performance of external service integrations:
+
+- Timeout and retry strategies for external APIs  
+- Asynchronous handling of non-critical integrations  
+- Fallback mechanisms for service failures  
+- Reduced dependency impact on checkout and page load  
+
+### 9. `/ecdn-optimization` — CDN & Edge Optimization
+Accelerates global content delivery using CDN strategies:
+
+- Optimized cache headers for static and dynamic assets  
+- Edge caching strategies for faster response times  
+- Image optimization and compression techniques  
+- Reduced origin server load via CDN offloading  
 
 
 
