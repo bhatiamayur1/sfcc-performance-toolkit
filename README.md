@@ -1,6 +1,6 @@
 # 👋 Hi, I'm Mayur Bhatia
 
-🚀 Senior Software Engineer | SFCC (Salesforce Commerce Cloud) Expert  
+🚀 Lead Engineer | Salesforce Expert  
 💼 15.5+ years of experience in building scalable eCommerce systems  
 🌍 Passionate about performance optimization, architecture, and solving real-world commerce challenges  
 
