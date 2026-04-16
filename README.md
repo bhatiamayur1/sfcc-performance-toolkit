@@ -21,11 +21,16 @@ I specialize in designing and optimizing high-scale eCommerce platforms using Sa
 
 | Module | Description | Status |
 |--------|-------------|--------|
-| [`/caching`](./caching/) | Page, partial & API response caching utilities | ✅ Ready |
-| [`/api-optimization`](./api-optimization/) | OCAPI/SCAPI request batching & retry logic | ✅ Ready |
-| [`/lazy-loading`](./lazy-loading/) | Image & component lazy-loading for storefronts | ✅ Ready |
-| [`/docs`](./docs/) | Architecture decisions & integration guides | ✅ Ready |
-
+| [`/caching`](./caching/) | SFCC smart caching layer for pages, partials & API responses | ✅ Ready |
+| [`/api-optimization`](./api-optimization/) | OCAPI/SCAPI request batching, timeout handling & retry logic | ✅ Ready |
+| [`/lazy-loading`](./lazy-loading/) | Image & component lazy-loading for improved storefront performance | ✅ Ready |
+| [`/checkout-optimization`](./checkout-optimization/) | Checkout flow optimization to reduce latency and improve conversions | ✅ Ready |
+| [`/frontend-performance`](./frontend-performance/) | Frontend enhancements including JS/CSS optimization & Core Web Vitals improvements | ✅ Ready |
+| [`/seo-performance`](./seo-performance/) | SEO-focused performance improvements for faster indexing & page speed | ✅ Ready |
+| [`/search-optimization`](./search-optimization/) | Optimized product search performance and query handling | ✅ Ready |
+| [`/third-party-integration-performance`](./third-party-integration-performance/) | Performance optimization for external integrations (payments, OMS, APIs) | ✅ Ready |
+| [`/ecdn-optimization`](./ecdn-optimization/) | CDN and edge caching strategies for faster global content delivery | ✅ Ready |
+| [`/docs`](./docs/) | Architecture decisions, best practices & integration guides | ✅ Ready |
 
 ## 🧩 Module Overview
 
