@@ -19,8 +19,8 @@ I specialize in designing and optimizing high-scale eCommerce platforms using Sa
 
 ## 🏆 Key Achievements
 
-- 🚀 Improved checkout performance by XX% leading to higher conversions  
-- 📈 Supported platforms handling XXXK+ users / transactions  
+- 🚀 Improved checkout performance by 20% leading to higher conversions  
+- 📈 Supported platforms handling 500K+ users / transactions  
 - 🧩 Designed reusable SFCC components and frameworks  
 - 👨‍💻 15+ years in software engineering across multiple domains  
 
