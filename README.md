@@ -15,7 +15,17 @@ I specialize in designing and optimizing high-scale eCommerce platforms using Sa
 🔹 Designed scalable and maintainable commerce architectures  
 🔹 Mentoring developers and contributing to the tech community  
 
+
 ---
+
+## 📦 Accelerators
+
+| Module | Description | Status |
+|--------|-------------|--------|
+| [`/caching`](./caching/) | Page, partial & API response caching utilities 
+| [`/api-optimization`](./api-optimization/) | OCAPI/SCAPI request batching & retry logic  
+| [`/lazy-loading`](./lazy-loading/) | Image & component lazy-loading for storefronts 
+| [`/docs`](./docs/) | Architecture decisions & integration guides 
 
 ## 🏆 Key Achievements
 
