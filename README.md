@@ -54,7 +54,13 @@ Real-world debugging scenarios and solutions
 
 - Led development teams for enterprise SFCC implementations  
 - Mentored junior developers and conducted technical reviews  
-- Drove architecture decisions and performance optimization strategies  
+- Drove architecture decisions and performance optimization strategies
+
+## 🌍 Community & Contributions
+
+- 📝 Technical articles: (Coming soon)
+- 🎤 Speaking sessions: (Planned)
+- 💻 Open-source contributions: (Active work in progress)  
 
 ## 🤝 Let's Connect
 
