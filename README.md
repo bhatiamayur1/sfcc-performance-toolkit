@@ -50,7 +50,11 @@ Real-world debugging scenarios and solutions
 - Performance Optimization
 - eCommerce Architecture
 
----
+## 👨‍💼 Leadership
+
+- Led development teams for enterprise SFCC implementations  
+- Mentored junior developers and conducted technical reviews  
+- Drove architecture decisions and performance optimization strategies  
 
 ## 🤝 Let's Connect
 
