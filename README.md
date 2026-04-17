@@ -1,3 +1,6 @@
+## 📜 License
+This project is licensed under the MIT License - feel free to use and adapt with proper attribution.
+
 # 👋 Hi, I'm Mayur Bhatia
 
 🚀 Lead Engineer | Salesforce Expert  
