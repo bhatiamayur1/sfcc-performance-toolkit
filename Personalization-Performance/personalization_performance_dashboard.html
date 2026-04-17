@@ -1,0 +1,178 @@
+
+<style>
+  .tier-card { border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .tier-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .tier-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .tier-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+  .bar-label { font-size: 11px; color: var(--color-text-secondary); width: 80px; flex-shrink: 0; text-align: right; }
+  .bar-bg { flex: 1; height: 8px; background: var(--color-background-tertiary); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .bar-val { font-size: 11px; color: var(--color-text-secondary); width: 52px; text-align: right; flex-shrink: 0; }
+  .seg-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 6px; }
+  .seg-pill { text-align: center; padding: 6px 4px; border-radius: 8px; border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .seg-num { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .seg-lbl { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .alerts-box { margin-top: 12px; }
+  .alert { font-size: 12px; padding: 8px 12px; border-radius: 6px; margin: 4px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .alert.warn { background: var(--color-background-warning); color: var(--color-text-warning); border-left: 3px solid var(--color-border-warning); }
+  .alert.ok { background: var(--color-background-success); color: var(--color-text-success); border-left: 3px solid var(--color-border-success); }
+  .controls { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ctl-btn { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; transition: all .15s; }
+  .ctl-btn.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 14px 0 6px; }
+</style>
+
+<div style="padding:4px 0 16px">
+  <div class="controls">
+    <button class="ctl-btn active" onclick="setScenario('baseline',this)">Baseline</button>
+    <button class="ctl-btn" onclick="setScenario('heavy',this)">Heavy personalization</button>
+    <button class="ctl-btn" onclick="setScenario('optimized',this)">After optimization</button>
+  </div>
+
+  <div class="section-title">Personalization tier breakdown</div>
+
+  <div id="tiers"></div>
+
+  <div class="section-title">Segment traffic distribution</div>
+  <div class="seg-grid" id="segs"></div>
+
+  <div class="section-title">Performance alerts</div>
+  <div class="alerts-box" id="alerts"></div>
+</div>
+
+<script>
+var SCENARIOS = {
+  baseline: {
+    label: 'Baseline (no optimization)',
+    tiers: [
+      { name: 'Anonymous', key: 'ANON', pct: 40, cacheHit: 94, avgMs: 85, color: '#97C459', badge: 'Full-page CDN', badgeBg: '#EAF3DE', badgeColor: '#3B6D11' },
+      { name: 'Segment', key: 'SEG', pct: 35, cacheHit: 58, avgMs: 280, color: '#EF9F27', badge: 'N variants', badgeBg: '#FAEEDA', badgeColor: '#633806' },
+      { name: 'Attribute', key: 'ATTR', pct: 18, cacheHit: 22, avgMs: 680, color: '#E24B4A', badge: 'Shell+frags', badgeBg: '#FCEBEB', badgeColor: '#791F1F' },
+      { name: 'Individual', key: 'INDV', pct: 7, cacheHit: 0, avgMs: 1240, color: '#A32D2D', badge: 'No cache', badgeBg: '#FCEBEB', badgeColor: '#A32D2D' }
+    ],
+    segs: [
+      { label: 'Anonymous', pct: 40 },
+      { label: 'Returning', pct: 22 },
+      { label: 'New visitor', pct: 18 },
+      { label: 'Loyal', pct: 10 },
+      { label: 'VIP', pct: 5 },
+      { label: 'Abandoner', pct: 3 },
+      { label: 'Sale hunter', pct: 1.5 },
+      { label: 'Wholesale', pct: 0.5 },
+      { label: 'Staff', pct: 0 },
+      { label: 'Reactivation', pct: 0 }
+    ],
+    alerts: [
+      { level: 'warn', msg: 'ATTRIBUTE tier cache hit rate 22% — below 40% critical threshold' },
+      { level: 'warn', msg: 'INDIVIDUAL tier p95 1240ms — loyalty widget blocking order page' },
+      { level: 'warn', msg: 'SEGMENT cache hit rate 58% — segment count too high (28 segments)' }
+    ]
+  },
+  heavy: {
+    label: 'Heavy personalization (worst case)',
+    tiers: [
+      { name: 'Anonymous', key: 'ANON', pct: 15, cacheHit: 91, avgMs: 90, color: '#97C459', badge: 'Full-page CDN', badgeBg: '#EAF3DE', badgeColor: '#3B6D11' },
+      { name: 'Segment', key: 'SEG', pct: 20, cacheHit: 31, avgMs: 540, color: '#E24B4A', badge: 'N variants', badgeBg: '#FCEBEB', badgeColor: '#791F1F' },
+      { name: 'Attribute', key: 'ATTR', pct: 38, cacheHit: 8, avgMs: 1100, color: '#A32D2D', badge: 'Shell+frags', badgeBg: '#FCEBEB', badgeColor: '#A32D2D' },
+      { name: 'Individual', key: 'INDV', pct: 27, cacheHit: 0, avgMs: 2400, color: '#A32D2D', badge: 'No cache', badgeBg: '#FCEBEB', badgeColor: '#A32D2D' }
+    ],
+    segs: [
+      { label: 'Anonymous', pct: 15 },
+      { label: 'Returning', pct: 20 },
+      { label: 'New visitor', pct: 15 },
+      { label: 'Loyal', pct: 18 },
+      { label: 'VIP', pct: 12 },
+      { label: 'Abandoner', pct: 9 },
+      { label: 'Sale hunter', pct: 6 },
+      { label: 'Wholesale', pct: 3 },
+      { label: 'Staff', pct: 1.5 },
+      { label: 'Reactivation', pct: 0.5 }
+    ],
+    alerts: [
+      { level: 'warn', msg: 'CRITICAL: ATTRIBUTE cache hit rate 8% — nearly all requests hit origin' },
+      { level: 'warn', msg: 'CRITICAL: INDIVIDUAL tier at 27% of traffic — site p95 > 2400ms' },
+      { level: 'warn', msg: 'CRITICAL: 100+ segments configured — cache keyspace destroyed' },
+      { level: 'warn', msg: 'Fragment CLS score 0.18 — personalized hero loading causes layout shift' }
+    ]
+  },
+  optimized: {
+    label: 'After optimization (toolkit applied)',
+    tiers: [
+      { name: 'Anonymous', key: 'ANON', pct: 42, cacheHit: 96, avgMs: 62, color: '#97C459', badge: 'Full-page CDN', badgeBg: '#EAF3DE', badgeColor: '#3B6D11' },
+      { name: 'Segment', key: 'SEG', pct: 40, cacheHit: 88, avgMs: 95, color: '#97C459', badge: 'N variants cached', badgeBg: '#EAF3DE', badgeColor: '#3B6D11' },
+      { name: 'Attribute', key: 'ATTR', pct: 14, cacheHit: 79, avgMs: 140, color: '#EF9F27', badge: 'Shell+frags', badgeBg: '#FAEEDA', badgeColor: '#633806' },
+      { name: 'Individual', key: 'INDV', pct: 4, cacheHit: 0, avgMs: 680, color: '#EF9F27', badge: 'Async deferred', badgeBg: '#FAEEDA', badgeColor: '#633806' }
+    ],
+    segs: [
+      { label: 'Anonymous', pct: 42 },
+      { label: 'Returning', pct: 22 },
+      { label: 'New visitor', pct: 20 },
+      { label: 'Loyal', pct: 8 },
+      { label: 'VIP', pct: 4 },
+      { label: 'Abandoner', pct: 2 },
+      { label: 'Sale hunter', pct: 1 },
+      { label: 'Wholesale', pct: 0.6 },
+      { label: 'Staff', pct: 0.3 },
+      { label: 'Reactivation', pct: 0.1 }
+    ],
+    alerts: [
+      { level: 'ok', msg: 'All tiers: cache hit rates above 75% threshold' },
+      { level: 'ok', msg: 'Segment count reduced to 10 — cache efficiency restored' },
+      { level: 'ok', msg: 'Fragment CLS score 0.01 — fallback HTML prevents layout shift' },
+      { level: 'ok', msg: 'Individual tier deferred async — does not block page TTFB' }
+    ]
+  }
+};
+
+var current = 'baseline';
+
+function setScenario(name, btn) {
+  current = name;
+  document.querySelectorAll('.ctl-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  render();
+}
+
+function bar(pct, color, maxPct) {
+  return '<div class="bar-bg"><div class="bar-fill" style="width:' + (pct/maxPct*100).toFixed(1) + '%;background:' + color + '"></div></div>';
+}
+
+function render() {
+  var s = SCENARIOS[current];
+
+  var tierHTML = s.tiers.map(function(t) {
+    var MAX_MS = 2500;
+    return '<div class="tier-card">' +
+      '<div class="tier-header">' +
+        '<span class="tier-name">' + t.name + '</span>' +
+        '<span class="tier-badge" style="background:' + t.badgeBg + ';color:' + t.badgeColor + '">' + t.badge + '</span>' +
+      '</div>' +
+      '<div class="bar-row"><span class="bar-label">% traffic</span>' + bar(t.pct, t.color, 50) + '<span class="bar-val">' + t.pct + '%</span></div>' +
+      '<div class="bar-row"><span class="bar-label">cache hits</span>' + bar(t.cacheHit, t.color, 100) + '<span class="bar-val">' + t.cacheHit + '%</span></div>' +
+      '<div class="bar-row"><span class="bar-label">avg latency</span>' + bar(t.avgMs, t.color, MAX_MS) + '<span class="bar-val">' + t.avgMs + 'ms</span></div>' +
+    '</div>';
+  }).join('');
+
+  var segHTML = s.segs.map(function(seg) {
+    var col = seg.pct > 10 ? '#378ADD' : seg.pct > 3 ? '#1D9E75' : '#888780';
+    return '<div class="seg-pill">' +
+      '<div class="seg-num" style="color:' + col + '">' + seg.pct.toFixed(1) + '%</div>' +
+      '<div class="seg-lbl">' + seg.label + '</div>' +
+    '</div>';
+  }).join('');
+
+  var alertHTML = s.alerts.map(function(a) {
+    return '<div class="alert ' + a.level + '">' +
+      '<span>' + (a.level === 'ok' ? '✓' : '⚠') + '</span>' +
+      '<span>' + a.msg + '</span>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('tiers').innerHTML  = tierHTML;
+  document.getElementById('segs').innerHTML   = segHTML;
+  document.getElementById('alerts').innerHTML = alertHTML;
+}
+
+render();
+</script>
